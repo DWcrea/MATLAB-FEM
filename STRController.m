@@ -5,12 +5,13 @@ classdef STRController < handle
         STRLineID = 0;
         STRSupportID = 0;
         STRSectionID = 0;
+        STRMaterialID = 0
         STRNodes;
         STRLines;
         STRSupports;
         STRSections;
+        STRMaterials;
     end
-    
     methods
         % 构造函数
         function obj = STRController()
@@ -63,6 +64,19 @@ classdef STRController < handle
             line = STRLine(id,node1,node2);
             obj.STRLines = [obj.STRLines,line];
         end
+        %% Material region
+        function material = AddSTRMaterial(obj,name,e)
+            obj.STRMaterialID = obj.STRMaterialID + 1;
+            id = obj.STRMaterialID;
+            material = STRMaterial(id,name,e);
+            obj.STRMaterials = [obj.STRMaterials,material];
+        end
+        function ApplyMaterial(~,line,material)
+            line.Material = material;
+        end
+        function DeleteMaterial(~,line)
+            line.Material = [];
+        end
         %% Section region
         function section = AddSTRSection(obj,name,ax,ix,iy,iz)
             obj.STRSectionID = obj.STRSectionID + 1;
@@ -70,7 +84,22 @@ classdef STRController < handle
             section = STRSection(id,name,ax,ix,iy,iz);
             obj.STRSections = [obj.STRSections,section];
         end
-       
+        function section = AddSTRSrctionRectangular(obj,name,width,height)
+            ax = width * height;
+            iy = 1/12 * width * height^3;
+            iz = 1/12 * height * width^3;
+            ix = iy + iz;
+            obj.STRSectionID = obj.STRSectionID + 1;
+            id = obj.STRSectionID;
+            section = STRSection(id,name,ax,ix,iy,iz);
+            obj.STRSections = [obj.STRSections,section];
+        end
+        function ApplySection(~,line,section)
+            line.Section = section;
+        end
+        function DeleteSection(~,line)
+            line.Section = [];
+        end
         %% Support region
         function support = AddSTRSupport(obj, name, kux, kuy, kuz, krx, kry, krz)
             obj.STRSupportID = obj.STRSupportID + 1;
@@ -105,27 +134,34 @@ classdef STRController < handle
             numLines = length(obj.STRLines);
             numSupports = length(obj.STRSupports);
             numSections = length(obj.STRSections);
+            numMaterials = length(obj.STRMaterials);
             fprintf('Model has %d nodes and %d lines\n', numNodes, numLines);
-            fprintf('--------------------\nNode:\n');
+            fprintf('----------------------------------------------------\nNode:\n');
             
             for i = 1:numNodes
                 targetNode = obj.STRNodes(i);
                 targetNode.ToString();
             end
-            fprintf('--------------------\nLine:\n');
+            fprintf('----------------------------------------------------\nLine:\n');
             for i = 1:numLines
                 targetLine = obj.STRLines(i);
                 targetLine.ToString();
+                fprintf('\n');
             end
-            fprintf('--------------------\nSupport:\n');
+            fprintf('----------------------------------------------------\nSupport:\n');
             for i = 1:numSupports
                 targetSupport = obj.STRSupports(i);
                 targetSupport.ToString();
             end
-            fprintf('--------------------\nSection:\n');
+            fprintf('----------------------------------------------------\nSection:\n');
             for i = 1:numSections
                 targetSection = obj.STRSections(i);
                 targetSection.ToString();
+            end
+               fprintf('----------------------------------------------------\nMatrtial:\n');
+            for i = 1:numMaterials
+                targetMaterial = obj.STRMaterials(i);
+                targetMaterial.ToString();
             end
         end
     end          

@@ -1,8 +1,10 @@
-classdef STRLine
+classdef STRLine < handle
     properties
         Id;
         Node1;
         Node2;
+        Section;
+        Material;
     end
     methods
         function obj = STRLine(id,node1,node2)
@@ -12,6 +14,16 @@ classdef STRLine
         end
         function ToString(obj)
                 fprintf('Line #%i (N%i -> N%i)\n',obj.Id,obj.Node1.Id,obj.Node2.Id)
+                if(~isobject(obj.Material))
+                    fprintf('Material: N/A\n');  
+                else
+                    fprintf('Material: %s\n',obj.Material.Name);
+                end
+                if(~isobject(obj.Section))
+                    fprintf('Section: No Section\n');  
+                else
+                    fprintf('Section: %s\n',obj.Section.Name);
+                end
         end
     end
 end

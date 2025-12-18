@@ -18,9 +18,14 @@ support2 = controller.AddSTRSupportFixed('Fixed');
 support3 = controller.AddSTRSupportPinned('Pinned');
 support4 = controller.AddSTRSupportRoller('Roller');
 
-controller.ApplySupport(node1,support1)
-setion1 = controller.AddSTRSection('hji',1,6,8,9);
+material1 = controller.AddSTRMaterial('Steel',210);
+material2 = controller.AddSTRMaterial('concrete',21);
 
+controller.ApplySupport(node1,support1)
+section1 = controller.AddSTRSrctionRectangular('300*500',0.3,0.5);
+controller.ApplySection(line1,section1);
+controller.ApplyMaterial(line1,material1);
+controller.ApplyMaterial(line2,material2);
 
 controller.ToString();
 %viewer.Render(controller);

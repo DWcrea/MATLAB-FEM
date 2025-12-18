@@ -28,7 +28,7 @@ classdef STRSupport < handle
         end
         function ToString(obj)
             fprintf(['Support (',obj.Name,')']);
-            fprintf('# %i [',obj.Id);
+            fprintf(' #%i [',obj.Id);
             if obj.Kux == obj.KUFree
                 fprintf('f')
             else
