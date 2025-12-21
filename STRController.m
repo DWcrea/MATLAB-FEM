@@ -5,12 +5,14 @@ classdef STRController < handle
         STRLineID = 0;
         STRSupportID = 0;
         STRSectionID = 0;
-        STRMaterialID = 0
+        STRMaterialID = 0;
+        STRReleaseID = 0;
         STRNodes;
         STRLines;
         STRSupports;
         STRSections;
         STRMaterials;
+        STRReleases;
     end
     methods
         % 构造函数
@@ -63,6 +65,46 @@ classdef STRController < handle
             id = obj.STRLineID;
             line = STRLine(id,node1,node2);
             obj.STRLines = [obj.STRLines,line];
+        end
+        %% Release rigion
+        function release = AddSTRRelease(obj,name,kux1,kuy1,kuz1,krx1,kry1,krz1,kux2,kuy2,kuz2,krx2,kry2,krz2)
+            obj.STRReleaseID = obj.STRReleaseID + 1;
+            id = obj.STRReleaseID;
+            release = STRRelease(id,name,kux1,kuy1,kuz1,krx1,kry1,krz1,kux2,kuy2,kuz2,krx2,kry2,krz2);
+            obj.STRReleases = [obj.STRReleases,release];
+        end
+        function release = AddSTRReleaseRigidPinned(obj,name)
+            obj.STRReleaseID = obj.STRReleaseID + 1;
+            id = obj.STRReleaseID;
+            release = STRRelease(id,name,STRRelease.KURigid,STRRelease.KURigid,STRRelease.KURigid,...
+                STRRelease.KRRigid,STRRelease.KRRigid,STRRelease.KRRigid,...
+                STRRelease.KURigid,STRRelease.KURigid,STRRelease.KURigid,...
+                STRRelease.KRFree,STRRelease.KRFree,STRRelease.KRFree);
+            obj.STRReleases = [obj.STRReleases,release];
+        end
+        function release = AddSTRReleasePinnedRigid(obj,name)
+            obj.STRReleaseID = obj.STRReleaseID + 1;
+            id = obj.STRReleaseID;
+            release = STRRelease(id,name,STRRelease.KURigid,STRRelease.KURigid,STRRelease.KURigid,...
+                STRRelease.KRFree,STRRelease.KRFree,STRRelease.KRFree,...
+                STRRelease.KURigid,STRRelease.KURigid,STRRelease.KURigid,...
+                STRRelease.KRRigid,STRRelease.KRRigid,STRRelease.KRRigid);
+            obj.STRReleases = [obj.STRReleases,release];
+        end
+        function release = AddSTRReleasePinnedPinned(obj,name)
+            obj.STRReleaseID = obj.STRReleaseID + 1;
+            id = obj.STRReleaseID;
+            release = STRRelease(id,name,STRRelease.KURigid,STRRelease.KURigid,STRRelease.KURigid,...
+                STRRelease.KRFree,STRRelease.KRFree,STRRelease.KRFree,...
+                STRRelease.KURigid,STRRelease.KURigid,STRRelease.KURigid,...
+                STRRelease.KRFree,STRRelease.KRFree,STRRelease.KRFree);
+            obj.STRReleases = [obj.STRReleases,release];
+        end
+        function ApplyRelease(~,line,release)
+            line.Release = release;
+        end
+        function DeleteRelease(~,line)
+            line.Release = [];
         end
         %% Material region
         function material = AddSTRMaterial(obj,name,e)
@@ -135,6 +177,7 @@ classdef STRController < handle
             numSupports = length(obj.STRSupports);
             numSections = length(obj.STRSections);
             numMaterials = length(obj.STRMaterials);
+            numReleases = length(obj.STRReleases);
             fprintf('Model has %d nodes and %d lines\n', numNodes, numLines);
             fprintf('----------------------------------------------------\nNode:\n');
             
@@ -158,10 +201,15 @@ classdef STRController < handle
                 targetSection = obj.STRSections(i);
                 targetSection.ToString();
             end
-               fprintf('----------------------------------------------------\nMatrtial:\n');
+            fprintf('----------------------------------------------------\nMaterial:\n');
             for i = 1:numMaterials
                 targetMaterial = obj.STRMaterials(i);
                 targetMaterial.ToString();
+            end
+            fprintf('----------------------------------------------------\nRelease:\n');
+            for i = 1:numReleases
+                targetRelease = obj.STRReleases(i);
+                targetRelease.ToString();
             end
         end
     end          

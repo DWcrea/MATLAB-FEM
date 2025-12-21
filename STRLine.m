@@ -5,6 +5,7 @@ classdef STRLine < handle
         Node2;
         Section;
         Material;
+        Release;
     end
     methods
         function obj = STRLine(id,node1,node2)
@@ -23,6 +24,11 @@ classdef STRLine < handle
                     fprintf('Section: No Section\n');  
                 else
                     fprintf('Section: %s\n',obj.Section.Name);
+                end
+                if(~isobject(obj.Release))
+                    fprintf('Release: No Release\n');  
+                else
+                    fprintf('Release: %s\n',obj.Release.Name);
                 end
         end
     end
