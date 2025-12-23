@@ -21,6 +21,15 @@ support4 = controller.AddSTRSupportRoller('Roller');
 material1 = controller.AddSTRMaterial('Steel',210);
 material2 = controller.AddSTRMaterial('concrete',21);
 
+loadcase1 = controller.AddSTRLoadcase('concentrate force');
+loadcase2 = controller.AddSTRLoadcase('DL');
+
+nodalload1 = controller.AddSTRNodalLoad(-100,0,100,100,0,100);
+nodalload2 = controller.AddSTRNodalLoad(-100,0,100,100,0,100);
+controller.ApplyNodalLoad(nodalload2,[1,3,4]);
+controller.ApplyNodalLoad(nodalload1,[1,2,5,3]);
+controller.DeleteNodalLoad(nodalload1);
+
 release1 = controller.AddSTRRelease("Pinned",1e15,1e15,1e15,1e15,1e15,1e15,1e15,1e15,1e15,1e15,1e15,1e15);
 release2 = controller.AddSTRReleasePinnedRigid("Pin-Rigid");
 release3 = controller.AddSTRReleaseRigidPinned("Rigid-Pin");
@@ -36,6 +45,7 @@ section1 = controller.AddSTRSrctionRectangular('300*500',0.3,0.5);
 controller.ApplySection(line1,section1);
 controller.ApplyMaterial(line1,material1);
 controller.ApplyMaterial(line2,material2);
+
 
 controller.ToString();
 %viewer.Render(controller);

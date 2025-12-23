@@ -7,12 +7,16 @@ classdef STRController < handle
         STRSectionID = 0;
         STRMaterialID = 0;
         STRReleaseID = 0;
+        STRLoadcaseID = 0;
+        STRNodalLoadID = 0;
         STRNodes;
         STRLines;
         STRSupports;
         STRSections;
         STRMaterials;
         STRReleases;
+        STRLoadcases;
+        STRNodalLoads;
     end
     methods
         % 构造函数
@@ -65,6 +69,33 @@ classdef STRController < handle
             id = obj.STRLineID;
             line = STRLine(id,node1,node2);
             obj.STRLines = [obj.STRLines,line];
+        end
+        %% Nodal Load rigion
+        function nodalload = AddSTRNodalLoad(obj,fx,fy,fz,mx,my,mz)
+            obj.STRNodalLoadID = obj.STRNodalLoadID + 1;
+            id = obj.STRNodalLoadID;
+            nodalload = STRNodalLoad(id,fx,fy,fz,mx,my,mz);
+            obj.STRNodalLoads = [obj.STRNodalLoads,nodalload];
+        end
+        function ApplyNodalLoad(~,load,appliedto)
+            for i = 1:length(appliedto)
+                id = appliedto(i);
+                if(~any(load.AppliedTo==id))
+                    load.AppliedTo = [load.AppliedTo,id];
+                end
+            end
+            load.AppliedTo = sort(load.AppliedTo);
+        end
+        function DeleteNodalLoad(~,load)
+            load.AppliedTo = [];
+        end
+
+        %% Load case rigion
+        function loadcase = AddSTRLoadcase(obj,name)
+            obj.STRLoadcaseID = obj.STRLoadcaseID + 1;
+            id = obj.STRLoadcaseID;
+            loadcase = STRLoadcase(id,name);
+            obj.STRLoadcases = [obj.STRLoadcases,loadcase];
         end
         %% Release rigion
         function release = AddSTRRelease(obj,name,kux1,kuy1,kuz1,krx1,kry1,krz1,kux2,kuy2,kuz2,krx2,kry2,krz2)
@@ -178,6 +209,9 @@ classdef STRController < handle
             numSections = length(obj.STRSections);
             numMaterials = length(obj.STRMaterials);
             numReleases = length(obj.STRReleases);
+            numLoadcases = length(obj.STRLoadcases);
+            numNodalloads = length(obj.STRNodalLoads);
+
             fprintf('Model has %d nodes and %d lines\n', numNodes, numLines);
             fprintf('----------------------------------------------------\nNode:\n');
             
@@ -210,6 +244,17 @@ classdef STRController < handle
             for i = 1:numReleases
                 targetRelease = obj.STRReleases(i);
                 targetRelease.ToString();
+            end
+            fprintf('----------------------------------------------------\nLoad case:\n');
+            for i = 1:numLoadcases
+                targetLoadcase = obj.STRLoadcases(i);
+                targetLoadcase.ToString();
+            end
+            fprintf('----------------------------------------------------\nNodal Load:\n');
+            for i = 1:numNodalloads
+                targetNodalLoad = obj.STRNodalLoads(i);
+                targetNodalLoad.ToString();
+                fprintf('\n');
             end
         end
     end          
