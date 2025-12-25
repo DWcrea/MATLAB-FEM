@@ -24,11 +24,22 @@ material2 = controller.AddSTRMaterial('concrete',21);
 loadcase1 = controller.AddSTRLoadcase('concentrate force');
 loadcase2 = controller.AddSTRLoadcase('DL');
 
+lineloadconc1 = controller.AddSTRLineLoadConcentrated(-100,0,100,200,500,100,0.4);
+controller.ApplyLoad(lineloadconc1,[2,2,3,5]);
+controller.DeleteLoad(lineloadconc1);
+
+lineloaddist1 = controller.AddSTRLineLoadDistributed(-100,0,100,200,500,100,0.4,...
+    -100,0,100,200,500,100,0.4);
+controller.ApplyLoad(lineloaddist1,[2,2,3,5]);
+controller.DeleteLoad(lineloaddist1);
+
+
+
 nodalload1 = controller.AddSTRNodalLoad(-100,0,100,100,0,100);
 nodalload2 = controller.AddSTRNodalLoad(-100,0,100,100,0,100);
-controller.ApplyNodalLoad(nodalload2,[1,3,4]);
-controller.ApplyNodalLoad(nodalload1,[1,2,5,3]);
-controller.DeleteNodalLoad(nodalload1);
+controller.ApplyLoad(nodalload2,[1,3,4]);
+controller.ApplyLoad(nodalload1,[1,2,5,3]);
+controller.DeleteLoad(nodalload1);
 
 release1 = controller.AddSTRRelease("Pinned",1e15,1e15,1e15,1e15,1e15,1e15,1e15,1e15,1e15,1e15,1e15,1e15);
 release2 = controller.AddSTRReleasePinnedRigid("Pin-Rigid");

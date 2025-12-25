@@ -9,6 +9,8 @@ classdef STRController < handle
         STRReleaseID = 0;
         STRLoadcaseID = 0;
         STRNodalLoadID = 0;
+        STRLineLoadConcentratedID = 0;
+        STRLineLoadDistributedID = 0;
         STRNodes;
         STRLines;
         STRSupports;
@@ -17,6 +19,8 @@ classdef STRController < handle
         STRReleases;
         STRLoadcases;
         STRNodalLoads;
+        STRLineLoadConcentrateds;
+        STRLineLoadDistributeds;
     end
     methods
         % 构造函数
@@ -70,14 +74,8 @@ classdef STRController < handle
             line = STRLine(id,node1,node2);
             obj.STRLines = [obj.STRLines,line];
         end
-        %% Nodal Load rigion
-        function nodalload = AddSTRNodalLoad(obj,fx,fy,fz,mx,my,mz)
-            obj.STRNodalLoadID = obj.STRNodalLoadID + 1;
-            id = obj.STRNodalLoadID;
-            nodalload = STRNodalLoad(id,fx,fy,fz,mx,my,mz);
-            obj.STRNodalLoads = [obj.STRNodalLoads,nodalload];
-        end
-        function ApplyNodalLoad(~,load,appliedto)
+        %% Load rigion
+        function ApplyLoad(~,load,appliedto)
             for i = 1:length(appliedto)
                 id = appliedto(i);
                 if(~any(load.AppliedTo==id))
@@ -86,10 +84,32 @@ classdef STRController < handle
             end
             load.AppliedTo = sort(load.AppliedTo);
         end
-        function DeleteNodalLoad(~,load)
+        function DeleteLoad(~,load)
             load.AppliedTo = [];
         end
-
+        %% Line Load Distributed rigion
+        function lineloaddis = AddSTRLineLoadDistributed(obj,fxS,fyS,fzS,mxS,myS,mzS,relativelocationS,...
+                fxE,fyE,fzE,mxE,myE,mzE,relativelocationE)
+            obj.STRLineLoadDistributedID = obj.STRLineLoadDistributedID + 1;
+            id = obj.STRLineLoadDistributedID;
+            lineloaddis = STRLineLoadDistributed(id,fxS,fyS,fzS,mxS,myS,mzS,relativelocationS,...
+                fxE,fyE,fzE,mxE,myE,mzE,relativelocationE);
+            obj.STRLineLoadDistributeds = [obj.STRLineLoadDistributeds,lineloaddis];
+        end
+        %% Line Load Concentrated rigion
+        function lineload = AddSTRLineLoadConcentrated(obj,fx,fy,fz,mx,my,mz,relativelocation)
+            obj.STRLineLoadConcentratedID = obj.STRLineLoadConcentratedID + 1;
+            id = obj.STRLineLoadConcentratedID;
+            lineload = STRLineLoadConcentrated(id,fx,fy,fz,mx,my,mz,relativelocation);
+            obj.STRLineLoadConcentrateds = [obj.STRLineLoadConcentrateds,lineload];
+        end
+        %% Nodal Load rigion
+        function nodalload = AddSTRNodalLoad(obj,fx,fy,fz,mx,my,mz)
+            obj.STRNodalLoadID = obj.STRNodalLoadID + 1;
+            id = obj.STRNodalLoadID;
+            nodalload = STRNodalLoad(id,fx,fy,fz,mx,my,mz);
+            obj.STRNodalLoads = [obj.STRNodalLoads,nodalload];
+        end
         %% Load case rigion
         function loadcase = AddSTRLoadcase(obj,name)
             obj.STRLoadcaseID = obj.STRLoadcaseID + 1;
@@ -211,7 +231,8 @@ classdef STRController < handle
             numReleases = length(obj.STRReleases);
             numLoadcases = length(obj.STRLoadcases);
             numNodalloads = length(obj.STRNodalLoads);
-
+            numLineLoadConcentrateds = length(obj.STRLineLoadConcentrateds);
+            numLineLoadDistributeds = length(obj.STRLineLoadDistributeds);
             fprintf('Model has %d nodes and %d lines\n', numNodes, numLines);
             fprintf('----------------------------------------------------\nNode:\n');
             
@@ -254,6 +275,18 @@ classdef STRController < handle
             for i = 1:numNodalloads
                 targetNodalLoad = obj.STRNodalLoads(i);
                 targetNodalLoad.ToString();
+                fprintf('\n');
+            end
+            fprintf('----------------------------------------------------\nLine Load Concentrated:\n');
+            for i = 1:numLineLoadConcentrateds
+                targetLoadConcentrated = obj.STRLineLoadConcentrateds(i);
+                targetLoadConcentrated.ToString();
+                fprintf('\n');
+            end
+            fprintf('----------------------------------------------------\nLine Load Distributed:\n');
+            for i = 1:numLineLoadDistributeds
+                targetLoadDistributed = obj.STRLineLoadDistributeds(i);
+                targetLoadDistributed.ToString();
                 fprintf('\n');
             end
         end
