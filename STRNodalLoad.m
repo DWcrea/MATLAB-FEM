@@ -1,6 +1,7 @@
 classdef STRNodalLoad < handle
     properties
         Id;
+        LoadCaseId;
         Fx;
         Fy;
         Fz;
@@ -10,8 +11,9 @@ classdef STRNodalLoad < handle
         AppliedTo = [];
     end 
     methods
-        function obj = STRNodalLoad(id,fx,fy,fz,mx,my,mz)
+        function obj = STRNodalLoad(id,loadCaseId,fx,fy,fz,mx,my,mz)
             obj.Id = id;
+            obj.LoadCaseId = loadCaseId;
             obj.Fx = fx;
             obj.Fy = fy;
             obj.Fz = fz;
@@ -21,7 +23,7 @@ classdef STRNodalLoad < handle
         end
         
         function ToString(obj)
-           fprintf('Nodal Load #%i\n',obj.Id);
+           fprintf('Nodal Load #%i LC#%i\n',obj.Id,obj.LoadCaseId.Id);
            fprintf('Fx = %5.2f\n',obj.Fx);
            fprintf('Fy = %5.2f\n',obj.Fy);
            fprintf('Fz = %5.2f\n',obj.Fz);

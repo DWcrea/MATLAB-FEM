@@ -1,6 +1,7 @@
 classdef STRLineLoadConcentrated < handle
     properties
         Id;
+        LoadCaseId;
         Fx;
         Fy;
         Fz;
@@ -11,8 +12,9 @@ classdef STRLineLoadConcentrated < handle
         Relativelocation;
     end 
     methods
-        function obj = STRLineLoadConcentrated(id,fx,fy,fz,mx,my,mz,relativelocation)
+        function obj = STRLineLoadConcentrated(id,loadCaseId,fx,fy,fz,mx,my,mz,relativelocation)
             obj.Id = id;
+            obj.LoadCaseId = loadCaseId;
             obj.Fx = fx;
             obj.Fy = fy;
             obj.Fz = fz;
@@ -23,7 +25,7 @@ classdef STRLineLoadConcentrated < handle
         end
         
         function ToString(obj)
-           fprintf('Line Load Concentrated #%i @(%4.2f)\n',obj.Id,obj.Relativelocation);
+           fprintf('Line Load Concentrated #%i LC#%i @(%4.2f)\n',obj.Id,obj.LoadCaseId.Id,obj.Relativelocation);
            fprintf('Fx = %5.2f\n',obj.Fx);
            fprintf('Fy = %5.2f\n',obj.Fy);
            fprintf('Fz = %5.2f\n',obj.Fz);

@@ -88,26 +88,26 @@ classdef STRController < handle
             load.AppliedTo = [];
         end
         %% Line Load Distributed rigion
-        function lineloaddis = AddSTRLineLoadDistributed(obj,fxS,fyS,fzS,mxS,myS,mzS,relativelocationS,...
+        function lineloaddis = AddSTRLineLoadDistributed(obj,loadCaseId,fxS,fyS,fzS,mxS,myS,mzS,relativelocationS,...
                 fxE,fyE,fzE,mxE,myE,mzE,relativelocationE)
             obj.STRLineLoadDistributedID = obj.STRLineLoadDistributedID + 1;
             id = obj.STRLineLoadDistributedID;
-            lineloaddis = STRLineLoadDistributed(id,fxS,fyS,fzS,mxS,myS,mzS,relativelocationS,...
+            lineloaddis = STRLineLoadDistributed(id,loadCaseId,fxS,fyS,fzS,mxS,myS,mzS,relativelocationS,...
                 fxE,fyE,fzE,mxE,myE,mzE,relativelocationE);
             obj.STRLineLoadDistributeds = [obj.STRLineLoadDistributeds,lineloaddis];
         end
         %% Line Load Concentrated rigion
-        function lineload = AddSTRLineLoadConcentrated(obj,fx,fy,fz,mx,my,mz,relativelocation)
+        function lineload = AddSTRLineLoadConcentrated(obj,loadCaseId,fx,fy,fz,mx,my,mz,relativelocation)
             obj.STRLineLoadConcentratedID = obj.STRLineLoadConcentratedID + 1;
             id = obj.STRLineLoadConcentratedID;
-            lineload = STRLineLoadConcentrated(id,fx,fy,fz,mx,my,mz,relativelocation);
+            lineload = STRLineLoadConcentrated(id,loadCaseId,fx,fy,fz,mx,my,mz,relativelocation);
             obj.STRLineLoadConcentrateds = [obj.STRLineLoadConcentrateds,lineload];
         end
         %% Nodal Load rigion
-        function nodalload = AddSTRNodalLoad(obj,fx,fy,fz,mx,my,mz)
+        function nodalload = AddSTRNodalLoad(obj,loadCaseId,fx,fy,fz,mx,my,mz)
             obj.STRNodalLoadID = obj.STRNodalLoadID + 1;
             id = obj.STRNodalLoadID;
-            nodalload = STRNodalLoad(id,fx,fy,fz,mx,my,mz);
+            nodalload = STRNodalLoad(id,loadCaseId,fx,fy,fz,mx,my,mz);
             obj.STRNodalLoads = [obj.STRNodalLoads,nodalload];
         end
         %% Load case rigion

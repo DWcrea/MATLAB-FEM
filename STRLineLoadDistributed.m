@@ -1,6 +1,7 @@
 classdef STRLineLoadDistributed < handle
     properties
         Id;
+        LoadCaseId;
         FxStart;
         FyStart;
         FzStart;
@@ -18,9 +19,10 @@ classdef STRLineLoadDistributed < handle
         AppliedTo = [];
     end 
     methods
-        function obj = STRLineLoadDistributed(id,fxS,fyS,fzS,mxS,myS,mzS,relativelocationS,...
+        function obj = STRLineLoadDistributed(id,loadCaseId,fxS,fyS,fzS,mxS,myS,mzS,relativelocationS,...
                 fxE,fyE,fzE,mxE,myE,mzE,relativelocationE)
             obj.Id = id;
+            obj.LoadCaseId = loadCaseId;
             obj.FxStart = fxS;
             obj.FyStart = fyS;
             obj.FzStart = fzS;
@@ -38,7 +40,7 @@ classdef STRLineLoadDistributed < handle
         end
         
         function ToString(obj)
-           fprintf('Line Load Distributed #%i @S(%4.2f) --> @E(%4.2f)\n',obj.Id,obj.RelativelocationStart,obj.RelativelocationEnd);
+           fprintf('Line Load Distributed #%i LC#%i @S(%4.2f) --> @E(%4.2f)\n',obj.Id,obj.LoadCaseId.Id,obj.RelativelocationStart,obj.RelativelocationEnd);
            fprintf('Fx = %5.2f --> %5.2f\n',obj.FxStart,obj.FxEnd);
            fprintf('Fy = %5.2f --> %5.2f\n',obj.FyStart,obj.FyEnd);
            fprintf('Fz = %5.2f --> %5.2f\n',obj.FyStart,obj.FyEnd);
